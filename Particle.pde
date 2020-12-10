@@ -1,9 +1,10 @@
 class Particle extends Floater {
+  float beta;
   Particle() {
     myColor=255;
     corners = 4;
-    xCorners = new int[] {2, 2, -2, -2};
-    yCorners = new int[] {2, -2, -2, 2};
+    xCorners = new int[] {12, 12, 8, 8};
+    yCorners = new int[] {2,-2,-2,2};
     myCenterX = 0;
     myCenterY = 0;
     beta = 255;
@@ -28,5 +29,30 @@ class Particle extends Floater {
   }
   public void setYvel(double yvel) {
     myYspeed=yvel;
+  }
+   public void show ()  //Draws the floater at the current position  
+  {
+    pushMatrix();
+    fill(myColor,beta);
+    stroke(myColor,beta);
+
+    //translate the (x,y) center of the ship to the correct position
+    translate((float)myCenterX, (float)myCenterY);
+
+    //convert degrees to radians for rotate()
+    float dRadians = (float)(myPointDirection*(Math.PI/180));
+
+    //rotate so that the polygon will be drawn in the correct direction
+    rotate(dRadians);
+
+    //draw the polygon
+    beginShape();
+    for (int nI = 0; nI < corners; nI++)
+    {
+      vertex(xCorners[nI], yCorners[nI]);
+    }
+    endShape(CLOSE);
+    
+    popMatrix();
   }
 }
