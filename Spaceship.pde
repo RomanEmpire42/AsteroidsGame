@@ -70,9 +70,6 @@ class Spaceship extends Floater
     return "x: "+nf((float)myCenterX,0,decimals)+"\ny: "+nf((float)myCenterY,0,decimals)+"\nhoriz. speed: "+nf((float)myXspeed,0,decimals)+"\nvert. speed: "+nf((float)myYspeed,0,decimals)+"\nrot: "+round((float)Math.abs(myPointDirection%360))+"°";
   }
   
-  
-  
-  
   public void show ()  //Draws the floater at the current position  
   {
     pushMatrix();
