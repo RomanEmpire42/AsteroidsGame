@@ -30,7 +30,6 @@ public void draw()
     galaxy[i].show();
   }
   for (int i = 0; i < thrustDust.length; i++) {
-  System.out.println(thrustDust[i].getBeta());
     thrustDust[i].setBeta(thrustDust[i].getBeta()-10);
     if (thrustDust[i].getBeta() > 0) {
       thrustDust[i].show();
