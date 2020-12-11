@@ -66,7 +66,6 @@ public void draw()
       //
       //trustDust!!
       //
-      System.out.println(i);
       if (thrustDust[i].getBeta() <= 0) {
         thrustDust[i].setXvel(Dragon.getXvel());
         thrustDust[i].setYvel(Dragon.getYvel());
