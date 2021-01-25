@@ -7,6 +7,8 @@ float teleportProgress=0;
 Spaceship Dragon;
 Star[] galaxy = new Star[250];
 Particle[] thrustDust = new Particle[100];
+Particle[] debris = new Particle[3];
+ArrayList <Asteroid> astroBelt = new ArrayList <Asteroid>();
 public void setup()
 {
   size(1000, 1000);
@@ -18,6 +20,10 @@ public void setup()
   for (int i = 0; i < thrustDust.length; i++) {
     thrustDust[i] = new Particle();
   }
+  for (int i = 0; i < debris.length; i++) {
+    debris[i] = new Particle();
+    debris[i].shipDebris();
+  }
   textSize(width/50);
   textAlign(LEFT, TOP);
 }
@@ -25,7 +31,6 @@ int i = 0;
 public void draw()
 {
   background(0);
-
   for (int i = 0; i < galaxy.length; i++) {
     galaxy[i].show();
   }
@@ -36,6 +41,10 @@ public void draw()
       thrustDust[i].accelerate(0.5);
       thrustDust[i].move();
     }
+  }
+  for (int i = 0; i < debris.length; i++) {
+    debris[i].show();
+    debris[i].move();
   }
 
   //teleport v
@@ -49,11 +58,16 @@ public void draw()
       teleportProgress=0;
       Dragon.setBeta(255);
       Dragon.setColor(255, 255, 255);
+      Dragon.turn(Math.random()*360);
     }
   } //done teleporting stuff
   else {
     fill(255);
-    text(Dragon.getData(3), width/100, height/50);
+    if (Dragon.hasLife()) {
+      text(Dragon.getData(3), width/100, height/50);
+    } else {
+      text(Dragon.getData(3), width/2 - 55, height/2 - 10);
+    }
     if (aIsPressed) {
       Dragon.turn(-3);
     }
@@ -66,7 +80,7 @@ public void draw()
       //
       //trustDust!!
       //
-      if (thrustDust[i].getBeta() <= 0) {
+      if (thrustDust[i].getBeta() <= 0 && Dragon.hasLife() == true) {
         thrustDust[i].setXvel(Dragon.getXvel());
         thrustDust[i].setYvel(Dragon.getYvel());
         thrustDust[i].setBeta(255);
@@ -84,9 +98,70 @@ public void draw()
       Dragon.setYvel(0);
     }
   }
-  Dragon.show();
-  Dragon.move();
+  if (Dragon.hasLife() == true) {
+    Dragon.show();
+    Dragon.move();
+  }
   //Dragon.thrust();
+
+
+
+
+  ///ASTEROIDS
+  if (astroBelt.size() <= 10) {
+    Asteroid rock = new Asteroid();
+    rock.setCoords(Math.random()*width, Math.random()*height);
+    rock.setSpin((Math.random()*10)-5);
+    rock.setXvel(Math.random()*6-3);
+    rock.setYvel(Math.random()*1-0.5);
+    astroBelt.add(rock);
+  }
+  for (int i = 0; i < astroBelt.size(); i++) {
+    if ((Math.abs((Dragon.getX() - astroBelt.get(i).getX())))<= 40 && (Math.abs((Dragon.getY() - astroBelt.get(i).getY()))<= 40) && Dragon.hasLife()) { 
+      Dragon.setLife(false);
+
+      for (int j = 0; j < debris.length; j++) {
+        debris[j].setBeta(255);
+        debris[j].setDirection(Dragon.getDirection());
+      }
+      debris[0].setCoords(Dragon.getX(), Dragon.getY());;
+      debris[1].setCoords(Dragon.getX()+((-10) * Math.cos((Math.PI/180)*debris[1].getDirection())), Dragon.getY()+((-10) * Math.sin((Math.PI/180)*debris[1].getDirection())));
+      debris[2].setCoords(Dragon.getX()+((-10) * Math.cos((Math.PI/180)*debris[1].getDirection())), Dragon.getY()+((-10) * Math.sin((Math.PI/180)*debris[1].getDirection())));
+      debris[1].setDirection(Dragon.getDirection()-90);
+      debris[2].setDirection(Dragon.getDirection()-90);
+      debris[1].setCoords(debris[1].getX()+((-5) * Math.cos((Math.PI/180)*debris[1].getDirection())), debris[1].getY()+((-5) * Math.sin((Math.PI/180)*debris[1].getDirection())));
+      debris[2].setCoords(debris[2].getX()+((5) * Math.cos((Math.PI/180)*debris[2].getDirection())), debris[2].getY()+((5) * Math.sin((Math.PI/180)*debris[2].getDirection())));
+      debris[1].setDirection(Dragon.getDirection());
+      debris[2].setDirection(Dragon.getDirection());
+      
+      debris[0].myXspeed = Math.random()/8-0.0625;
+      debris[0].myYspeed = Math.random()/8-0.0625;
+      debris[1].myXspeed = Math.random()/8-0.0625;
+      debris[1].myYspeed = Math.random()/8-0.0625;
+      debris[2].myXspeed = Math.random()/8-0.0625;
+      debris[2].myYspeed = Math.random()/8-0.0625;
+
+      //make the ship split into 3 rhombusus (using particles)
+      //you could also add a particle explosion, randomizing color between various reds and oranges
+    } else{
+      //THIS IS A TEST -- testing to see if I could add sections to the ship using the debris peices. Would require changes to teleportation (for fading)
+      /*
+      for (int j = 0; j < debris.length; j++) {
+        debris[j].setBeta(255);
+        debris[j].setDirection(Dragon.getDirection());
+        debris[j].setCoords(Dragon.getX(), Dragon.getY());
+      }
+      debris[0].setColor(255);
+      debris[1].setColor(200);
+      debris[2].setColor(200);
+      */
+    }
+    astroBelt.get(i).show();
+    astroBelt.get(i).turn(astroBelt.get(i).getSpin()/50);
+    astroBelt.get(i).move();
+    fill(255);
+    //ellipse((float)astroBelt.get(i).getX(), (float)astroBelt.get(i).getY(), 10, 10);
+  }
 }
 
 
