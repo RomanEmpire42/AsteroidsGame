@@ -2,6 +2,8 @@ class Spaceship extends Floater
 {   
   private float beta;
   private boolean alive;
+  private int pewpew;
+  private int score;
   Spaceship() {
     myColor=255;
     corners = 6;
@@ -9,10 +11,18 @@ class Spaceship extends Floater
     yCorners = new int[] {0, 10, 5, 0, -5, -10};
     myCenterX=width/2;
     myCenterY=height/2;
-    beta=255;
+    beta=0;
     myPointDirection = 0;
     myXspeed=myYspeed=0;
     alive = true;
+    pewpew = 0;
+    score = 0;
+  }
+  public void setBullet(int b_) {
+    pewpew = b_;
+  }
+  public int getBullet() {
+    return(pewpew);
   }
   public void setLife(boolean l_) {
     alive = l_;
@@ -41,7 +51,9 @@ class Spaceship extends Floater
 
     popMatrix();
   }
-
+  public void addScore(int s_) {
+    score += s_;
+  }
   public double getX() {
     return myCenterX;
   }
@@ -75,9 +87,9 @@ class Spaceship extends Floater
   }
   public String getData(int decimals) {
     if (alive == true) {
-      return "x: "+nf((float)myCenterX, 0, decimals)+"\ny: "+nf((float)myCenterY, 0, decimals)+"\nhoriz. speed: "+nf((float)myXspeed, 0, decimals)+"\nvert. speed: "+nf((float)myYspeed, 0, decimals)+"\nrot: "+round((float)Math.abs(myPointDirection%360))+"°";
+      return "x: "+nf((float)myCenterX, 0, decimals)+"\ny: "+nf((float)myCenterY, 0, decimals)+"\nhoriz. speed: "+nf((float)myXspeed, 0, decimals)+"\nvert. speed: "+nf((float)myYspeed, 0, decimals)+"\nrot: "+round((float)Math.abs(myPointDirection%360))+"°"+"\nscore:" + score;
     }
-    return "GAME OVER";
+    return "GAME OVER" + "\n Score: "+score;
   }
 
   public void show ()  //Draws the floater at the current position  
