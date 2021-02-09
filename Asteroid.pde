@@ -1,6 +1,7 @@
 class Asteroid extends Floater {
   private double spin;
-  Asteroid() {
+  private int astroSize;
+  Asteroid(int s_) {
     myColor=100;
     corners = 36;
     xCorners = new int[corners];
@@ -10,7 +11,10 @@ class Asteroid extends Floater {
     myPointDirection = 0;
     myXspeed = myYspeed = 0;
     spin = 0;
-    generate();
+    generate(s_);
+  }
+  public void setColor(int c_){
+    myColor = c_;
   }
   public void setSpin(double s_) {
     spin = s_;
@@ -24,6 +28,9 @@ class Asteroid extends Floater {
   public double getY() {
     return myCenterY;
   }
+  public int getSize() {
+    return astroSize;
+  }
   public void setCoords(double x_, double y_) {
     myCenterX = x_;
     myCenterY = y_;
@@ -34,20 +41,21 @@ class Asteroid extends Floater {
   public void setYvel(double yvel) {
     myYspeed=yvel;
   }
-  private void generate() {
-    double radius = 20 + corners;
+  private void generate(int size) {
+    astroSize = size;
+    double radius = size + corners;
     for (double dir = 0.0; dir < 360; dir+= 360/corners) {
       int rand = (int)(Math.random()*100);
       if (rand < 10) {
-        radius = (Math.random()*15)+(10+corners);
+        radius = (Math.random()*(size*1.5))+(size/2+corners);
       } else if (rand < 50) {
-        if (radius > 60) {
+        if (radius > (size*3)) {
           radius-=3;
         }
-        if (radius < 40) {
+        if (radius < (size*2)) {
           radius+=3;
         } else {
-          radius += ((int)Math.random()*10)-5;
+          radius += ((int)Math.random()*(size/2))-(size/4);
         }
       } else {
       }
